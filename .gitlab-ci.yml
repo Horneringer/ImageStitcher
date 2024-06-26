@@ -1,0 +1,25 @@
+docker-build:
+  image: docker:latest
+  stage: build
+  before_script:
+    - mkdir -p /usr/local/share/ca-certificates
+    - openssl s_client -showcerts -connect gitlab.npomis.ru:443 -servername gitlab.npomis.ru < /dev/null 2>/dev/null | openssl x509 -outform PEM > /usr/local/share/ca-certificates/gitlab.npomis.ru.crt
+    - update-ca-certificates
+    - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
+  script:
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        tag=""
+        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+      else
+        tag=":$CI_COMMIT_REF_SLUG"
+        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+      fi
+    - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
+    - docker push "$CI_REGISTRY_IMAGE${tag}"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $CI_COMMIT_REF_NAME == 'dev'
+      exists:
+        - Dockerfile
+  tags:
+    - docker

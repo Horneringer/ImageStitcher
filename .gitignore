@@ -1,0 +1,51 @@
+#docs
+data/
+html
+docs/media
+docs/markdown
+docs/source/.*
+docs/pdf
+docs/latex
+*.log
+*.aux
+*.bbl
+*.blg
+*.acn
+*.bcf
+*.glo
+*.glo-abr
+*.run.xml
+*.synctex(busy)
+*.toc
+*.xdy
+logs_make_docs
+
+#Generate qmake
+*.pro.user
+*.stash
+moc_*.cpp
+moc_*.h
+
+project/*/uics/*
+project/bin/*
+
+#objs
+*.o
+
+#bin exchange_complex
+exchange_complex.debug
+exchange_complex.release
+
+#generate make
+project/Makefile
+project/*/Makefile
+
+#generate libs
+project/*/libs
+project/*/*.so
+project/*/*.so.*
+
+qrc_resources*.cpp
+
+ExchangeComplex
+

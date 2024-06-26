@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  image_stitcher:
+    build:
+      context: .
+    #image: gitlab.npomis.ru:5050/8_departament/gep/services/scpm/abrisgenerator:latest
+    container_name: image_stitcher
+    hostname: image_stitcher
+    environment:
+      SUBD_HOSTNAME: "${SUBD_HOSTNAME}"
+      SUBD_PORT: "${SUBD_PORT}"
+      SUBD_DB: "${SUBD_DB}"
+      SUBD_USER: "${SUBD_USER}"
+      SUBD_PASSWORD: "${SUBD_PASSWORD}"
+    # restart: always
+    ports:
+      - "8500:8300"
+      # - "8081:80"
+    volumes:
+      - ./project:/project/
+      - ./data:/data
+      #- ./opt:/opt
+      #- ../db_exchange_server:/clientmodule
+
+    networks:
+      - testnet
+
+networks:
+  testnet:
